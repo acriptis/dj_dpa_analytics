@@ -2,11 +2,13 @@ This is django app which dumps dialogs from DP-Agent API
 
 # Install
 
-`pip install requirements.txt
- python manage.py migrate
- python manage.py makemigrations
- python manage.py createsuperuser
- python manage.py runserver`
+```
+pip install requirements.txt
+python manage.py migrate
+python manage.py makemigrations
+python manage.py createsuperuser
+python manage.py runserver
+ ```
 
 # Make first dump:
 `python upload_dialogs_to_db.py - loads all dialogs into database from DP-Agent service`
