@@ -253,4 +253,3 @@ if __name__=="__main__":
     # get list of dialogs:
     from django.conf import settings
     dump_new_dialogs(dpagent_base_url=settings.DP_AGENT_BASE_URL)
-    
