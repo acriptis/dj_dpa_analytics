@@ -1,11 +1,13 @@
+import json
 from django.contrib import admin
 
-# Register your models here.
-from django.contrib import admin
 from dialogs.models import Dialog, Author, Utterance, Annotation, UtteranceHypothesis
+from django.template.loader import render_to_string
 
 class AuthorAdmin(admin.ModelAdmin):
-    pass
+    list_display = (
+        "__str__", "user_telegram_id"
+    )
 admin.site.register(Author, AuthorAdmin)
 
 
@@ -15,20 +17,30 @@ class UtteranceInline(admin.TabularInline):
     # extra = 0
 
 class DialogAdmin(admin.ModelAdmin):
-    list_display = ('__str__', 'start_time', 'rating')
-    # inlines = [
-    #     UtteranceInline,
-    # ]
-    fields = ('conversation_id', 'dp_id', 'start_time', 'rating', 'human', 'bot', 'view_dialog')
-    readonly_fields = ('conversation_id', 'dp_id', 'start_time', 'rating', 'human', 'bot', 'view_dialog')
+    list_display = (
+        'get_author',
+        # 'human',
+        'start_time', 'rating')
+
+    def get_author(self, obj):
+        return obj.human.user_telegram_id
+
+    get_author.short_description = 'Author'
+
+    fields = ('conversation_id', 'start_time', 'human', 'view_dialog', 'rating')
+    readonly_fields = ('conversation_id', 'start_time', 'rating', 'human', 'view_dialog')
     search_fields = ['dp_id', 'conversation_id']
     list_filter = ('rating',)
     ordering = ('-start_time',)
 
     def view_dialog(self, obj):
-        return str(obj)
-
+        return render_to_string('admin/dialog_view.html', {'dialog_json': obj.dialog_json})
+    # def view_dialog(self, obj):
+    #     return str(obj)
+    view_dialog.short_description = 'Dialog view'
+    view_dialog.allow_tags = True
     view_dialog.empty_value_display = '???'
+
 
 admin.site.register(Dialog, DialogAdmin)
 

@@ -43,6 +43,8 @@ class Dialog(models.Model):
     human = models.ForeignKey(Author, null=True, blank=True, on_delete=models.CASCADE, related_name='human_utterances')
     bot = models.ForeignKey(Author, null=True, blank=True, on_delete=models.CASCADE, related_name='bot_utterances')
 
+    dialog_json = JSONField(default=None, null=True, blank=True)
+
     def __str__(self):
         if self.utterance_set.count()>0:
             output = ""
@@ -107,7 +109,7 @@ class Dialog(models.Model):
 class Utterance(models.Model):
     parent_dialog = models.ForeignKey(Dialog, on_delete=models.CASCADE)
 
-    text = models.CharField(max_length=2064)
+    text = models.CharField(max_length=4064)
 
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
 
@@ -243,7 +245,7 @@ class UtteranceHypothesis(models.Model):
     parent_utterance = models.ForeignKey(Utterance, on_delete=models.CASCADE)
 
     skill_name = models.CharField(max_length=256)
-    text = models.CharField(max_length=2064)
+    text = models.CharField(max_length=4064)
     confidence = models.FloatField()
 
     # all stuff that the skill has pushed out:
