@@ -1,0 +1,69 @@
+<div id="Fedya_conversation_view">
+    Human: <b>{{dialog_json.human.user_external_id}}</b>
+    <h2>Conversation view</h2>
+    <table>
+        {% for utt in dialog_json.utterances %}
+<!--        {{utt}}-->
+<!--        ####################-->
+            {% if utt.active_skill %}
+            <tr bgcolor="lightgray">
+            {% else %}
+            <tr bgcolor="white">
+            {% endif %}
+                <td>{{utt.user.user_type}}</td>
+                <td>
+                    <details>
+                        <summary>
+                            {{utt.text}}
+                        </summary>
+
+
+
+                        {% if utt.hypotheses %}
+                        <h4>Utterance Hypotheses</h4>
+                        <table class="hypotheses">
+                            <tr>
+                                <th>Skill Name</th>
+                                <th>Confidence</th>
+                                <th>Text</th>
+                                <th>Other attrs</th>
+                            </tr>
+                            {% for hypo in utt.hypotheses %}
+                            <tr>
+                                <td>{{hypo.skill_name}}</td>
+                                <td>{{hypo.confidence|floatformat:2}}</td>
+                                <td><b>{{hypo.text}}</b></td>
+                                <td>
+                                    <details>
+                                        <summary>
+                                            Expand...
+                                        </summary>
+                                        {{hypo.other_attrs}}
+                                    </details>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                        {% endif %}
+                        <h4>Annotations</h4>
+                        <table class="annotations">
+                            <tr>
+                                <th>Annotator</th>
+                                <th>Data</th>
+                            </tr>
+                            {% for anno, anno_val in utt.annotations.items %}
+                            <tr>
+                                <td>{{anno}}</td>
+<!--                                <td>lol</td>-->
+                                <td>{{anno_val}}</td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                    </details>
+                </td>
+            </tr>
+        {% endfor %}
+
+    </table>
+</div>
+<!--{{dialog_json}}-->
