@@ -132,7 +132,8 @@ def dump_new_dialogs(dpagent_base_url):
                     # get or create authors
                     author_h, _ = Author.objects.get_or_create(
                         user_type='human',
-                        dp_id=remote_data['human']['id']
+                        dp_id=remote_data['human']['id'],
+                        user_telegram_id=remote_data['human']['user_external_id']
                     )
 
                     author_b, _ = Author.objects.get_or_create(
@@ -149,7 +150,8 @@ def dump_new_dialogs(dpagent_base_url):
                         dp_id=dp_id,
                         # rating=rating,
                         human=author_h,
-                        bot=author_b
+                        bot=author_b,
+                        dialog_json=remote_data
                     )
                     # for utt_idx, each_utterance in enumerate(dialog_dict['utterances']):
                     # import ipdb; ipdb.set_trace()
@@ -242,6 +244,11 @@ def dump_new_dialogs(dpagent_base_url):
                                     print("Investigate")
 
                     logger.info(f'Successfully added a new conversation {dp_id} to local DB.')
+                else:
+                    #dialog already exists
+                    # update or skip?
+                    pass
+
 
             # find dialog ids that are missed
         else:
